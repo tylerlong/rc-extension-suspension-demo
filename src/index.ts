@@ -19,6 +19,27 @@ const main = async () => {
       record.extensionNumber === process.env.RINGCENTRAL_EXTENSION_TO_SUSPEND
   );
   console.log(JSON.stringify(extension_to_be_suspended, null, 2));
+  await rc
+    .restapi()
+    .account()
+    .extension(extension_to_be_suspended!.id!.toString())
+    .put({
+      status: 'Disabled',
+      statusInfo: {
+        reason: 'SuspendedVoluntarily',
+        comment: 'Self-deletion via Mobile App',
+      },
+    });
+  // await rc
+  //   .restapi()
+  //   .account()
+  //   .extension(extension_to_be_suspended!.id!.toString())
+  //   .put({
+  //     status: 'Enabled',
+  //     statusInfo: {
+  //       comment: 'Restore the extension',
+  //     },
+  //   });
   await rc.revoke();
 };
 
